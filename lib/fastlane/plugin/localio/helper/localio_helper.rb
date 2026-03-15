@@ -28,11 +28,11 @@ module Fastlane
         source_opts = build_source_options(params)
         config.source(source_sym, source_opts)
 
-        config.output_path = params[:output_path] if params[:output_path]
-        config.formatting = params[:formatting].to_sym if params[:formatting]
+        config.output_path(params[:output_path]) if params[:output_path]
+        config.formatting(params[:formatting].to_sym) if params[:formatting]
 
-        config.only = params[:only] if params[:only]
-        config.except = params[:except] if params[:except]
+        config.only(keys: params[:only]) if params[:only]
+        config.except(keys: params[:except]) if params[:except]
 
         config
       end

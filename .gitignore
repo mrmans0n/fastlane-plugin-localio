@@ -33,3 +33,6 @@
 *.swo
 *~
 .vscode/
+vendor/
+.bundle/
+Gemfile.lock

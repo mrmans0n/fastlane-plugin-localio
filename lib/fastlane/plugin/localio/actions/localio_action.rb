@@ -22,7 +22,8 @@ module Fastlane
         end
 
         Dir.chdir(File.dirname(File.expand_path(locfile_path))) do
-          ::Localio.from_locfile(File.basename(locfile_path))
+          config = ::Locfile.load(File.basename(locfile_path))
+          ::Localio.from_configuration(config)
         end
       end
 
