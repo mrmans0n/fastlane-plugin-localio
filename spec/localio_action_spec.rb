@@ -11,7 +11,8 @@ describe Fastlane::Actions::LocalioAction do
         File.write(locfile_path, "# test Locfile")
 
         mock_config = double('Locfile')
-        expect(Locfile).to receive(:load).with('Locfile').and_return(mock_config)
+        allow(Locfile).to receive(:new).and_return(mock_config)
+        allow(mock_config).to receive(:instance_eval)
         expect(Localio).to receive(:from_configuration).with(mock_config)
 
         Fastlane::Actions::LocalioAction.run(
