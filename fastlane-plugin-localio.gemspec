@@ -19,9 +19,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.6'
 
-  # localio requires Ruby >= 3.2; listed here for documentation but not enforced at install time.
-  # Users must install localio separately in their environment.
-  # spec.add_dependency 'localio', '~> 0.2'
+  spec.add_dependency 'localio', '>= 0.2'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'fastlane', '>= 2.0'
