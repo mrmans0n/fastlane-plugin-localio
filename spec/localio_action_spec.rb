@@ -10,7 +10,9 @@ describe Fastlane::Actions::LocalioAction do
         FileUtils.mkdir_p(File.dirname(locfile_path))
         File.write(locfile_path, "# test Locfile")
 
-        expect(Localio).to receive(:from_locfile).with('Locfile')
+        mock_config = double('Locfile')
+        expect(Locfile).to receive(:load).with('Locfile').and_return(mock_config)
+        expect(Localio).to receive(:from_configuration).with(mock_config)
 
         Fastlane::Actions::LocalioAction.run(
           FastlaneCore::Configuration.create(
@@ -41,10 +43,10 @@ describe Fastlane::Actions::LocalioAction do
         allow(Locfile).to receive(:new).and_return(mock_config)
         allow(mock_config).to receive(:platform)
         allow(mock_config).to receive(:source)
-        allow(mock_config).to receive(:output_path=)
-        allow(mock_config).to receive(:formatting=)
-        allow(mock_config).to receive(:only=)
-        allow(mock_config).to receive(:except=)
+        allow(mock_config).to receive(:output_path)
+        allow(mock_config).to receive(:formatting)
+        allow(mock_config).to receive(:only)
+        allow(mock_config).to receive(:except)
         allow(Localio).to receive(:from_configuration)
       end
 
@@ -64,7 +66,7 @@ describe Fastlane::Actions::LocalioAction do
 
         expect(mock_config).to have_received(:platform).with(:android, {})
         expect(mock_config).to have_received(:source).with(:xlsx, { path: 'translations.xlsx', sheet: 'Sheet1' })
-        expect(mock_config).to have_received(:output_path=).with('app/src/main/res')
+        expect(mock_config).to have_received(:output_path).with('app/src/main/res')
         expect(Localio).to have_received(:from_configuration).with(mock_config)
       end
 
@@ -84,7 +86,7 @@ describe Fastlane::Actions::LocalioAction do
 
         expect(mock_config).to have_received(:platform).with(:ios, {})
         expect(mock_config).to have_received(:source).with(:google_drive, { spreadsheet: 'My Translations', sheet: 'Main' })
-        expect(mock_config).to have_received(:output_path=).with('Resources')
+        expect(mock_config).to have_received(:output_path).with('Resources')
       end
 
       it 'generates Swift localization with platform options' do
@@ -118,7 +120,7 @@ describe Fastlane::Actions::LocalioAction do
           )
         )
 
-        expect(mock_config).to have_received(:formatting=).with(:camel_case)
+        expect(mock_config).to have_received(:formatting).with(:camel_case)
       end
 
       it 'passes only and except filters' do
@@ -135,8 +137,8 @@ describe Fastlane::Actions::LocalioAction do
           )
         )
 
-        expect(mock_config).to have_received(:only=).with('[\[][a][\]]')
-        expect(mock_config).to have_received(:except=).with('[\[][b][\]]')
+        expect(mock_config).to have_received(:only).with(keys: '[\[][a][\]]')
+        expect(mock_config).to have_received(:except).with(keys: '[\[][b][\]]')
       end
 
       it 'merges source_options with source_path and source_sheet' do
