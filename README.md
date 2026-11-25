@@ -183,6 +183,31 @@ localio(
 | `only` | Regex filter to include only matching keys | |
 | `except` | Regex filter to exclude matching keys | |
 
+## Development
+
+The development dependency on fastlane is limited to `~> 2.237.0`.
+Localio 0.2.5 uses `google_drive` 3.x and `googleauth` < 1, which require
+Faraday 1. Fastlane 2.238 and later require Faraday 2. Fastlane 2.237 also
+declares the extracted standard-library gems, including `abbrev`, needed
+on newer Ruby versions. This constraint only affects development, not the
+plugin's runtime dependencies.
+
+CI tests Ruby 3.2, 3.3, 3.4, and 4.0 and builds the gem without publishing it.
+Run the same checks locally:
+
+```bash
+ruby test/dependency_policy_test.rb # No Bundler or fastlane required
+bundle install
+bundle exec rspec
+bundle exec ruby test/localio_smoke_test.rb
+bundle exec gem build fastlane-plugin-localio.gemspec
+```
+
+The smoke test runs the real CSV-to-JSON conversion in a separate Ruby
+process so the unit suite's stubs cannot hide dependency-loading errors.
+`Gemfile.lock` remains untracked, so CI resolves the supported dependency
+range on each Ruby version.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

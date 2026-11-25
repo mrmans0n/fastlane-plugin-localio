@@ -10,14 +10,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        ruby-version: ['3.2', '3.3', '3.4']
+        ruby-version: ['3.2', '3.3', '3.4', '4.0']
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Ruby ${{ matrix.ruby-version }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
+      - name: Check dependency policy
+        run: ruby test/dependency_policy_test.rb
       - name: Run specs
         run: bundle exec rspec
+      - name: Run CSV to JSON smoke test
+        run: bundle exec ruby test/localio_smoke_test.rb
+      - name: Build gem
+        run: bundle exec gem build fastlane-plugin-localio.gemspec
