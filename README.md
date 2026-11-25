@@ -190,7 +190,9 @@ Localio 0.2.5 uses `google_drive` 3.x and `googleauth` < 1, which require
 Faraday 1. Fastlane 2.238 and later require Faraday 2. Fastlane 2.237 also
 declares the extracted standard-library gems, including `abbrev`, needed
 on newer Ruby versions. This constraint only affects development, not the
-plugin's runtime dependencies.
+plugin's runtime dependencies. Renovate applies the same upper bound to
+fastlane updates so automated PRs do not undo this compatibility constraint.
+Remove that bound when Localio's Google Drive dependency supports Faraday 2.
 
 CI tests Ruby 3.2, 3.3, 3.4, and 4.0 and builds the gem without publishing it.
 Run the same checks locally:
